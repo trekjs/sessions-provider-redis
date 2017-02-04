@@ -1,6 +1,6 @@
 {
   "name": "sessions-provider-redis",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Sessions Redis Provider",
   "license": "MIT",
   "repository": "trekjs/sessions-provider-redis",
@@ -31,11 +31,11 @@
   },
   "dependencies": {
     "fast-json-parse": "1.0.2",
-    "fast-safe-stringify": "1.1.4",
+    "fast-safe-stringify": "1.1.6",
     "redis": "2.6.5"
   },
   "devDependencies": {
-    "ava": "0.17",
+    "ava": "0.18",
     "babel-plugin-transform-async-to-generator": "6",
     "babel-plugin-transform-es2015-modules-commonjs": "6",
     "babel-preset-es2016": "6",
