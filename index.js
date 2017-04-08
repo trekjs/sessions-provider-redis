@@ -1,3 +1,9 @@
+/*!
+ * sessions-provider-redis
+ * Copyright(c) 2017 Fangdun Cai <cfddream@gmail.com> (https://fundon.me)
+ * MIT Licensed
+ */
+
 'use strict'
 
 const redis = require('redis')
@@ -5,18 +11,17 @@ const parse = require('fast-json-parse')
 const stringify = require('fast-safe-stringify')
 
 const defaults = {
-  // serializer
+  // Serializer
   serializer: { parse, stringify },
-  // redis client
+  // Redis client
   client: undefined,
-  // redis client options
+  // Redis client options
   clientOptions: undefined
 }
 
 module.exports = class RedisProvider {
 
-  constructor (options) {
-    options = Object.assign({}, options)
+  constructor (options = {}) {
     Object.keys(options).forEach(k => {
       if (!(k in defaults)) delete options[k]
     })
@@ -27,7 +32,7 @@ module.exports = class RedisProvider {
     }
   }
 
-  async clear () {
+  clear () {
     return new Promise((resolve, reject) => {
       this.client.flushdb(err => {
         err ? reject(err) : resolve()
@@ -35,30 +40,42 @@ module.exports = class RedisProvider {
     })
   }
 
-  async get (sid) {
+  get (sid) {
     return new Promise((resolve, reject) => {
-      this.client.get(sid, (err, data) => {
-        if (err) return reject(err)
+      this.client.get(sid, (error, data) => {
+        if (error) return reject(error)
         if (!data) return resolve()
-        const result = this.serializer.parse(data.toString())
-        if (result.err) return reject(result.err)
-        resolve(result.value)
+        const { err, value } = this.serializer.parse(data)
+        err ? reject(err) : resolve(value)
       })
     })
   }
 
-  async set (sid, sess, expires) {
+  set (sid, sess, expires) {
     return new Promise((resolve, reject) => {
-      this.client.setex(sid, expires / 1000, this.serializer.stringify(sess), err => {
-        err ? reject(err) : resolve()
+      this.client.setex(
+        sid,
+        expires / 1000,
+        this.serializer.stringify(sess),
+        (err, data) => {
+          err ? reject(err) : resolve(data)
+        }
+      )
+    })
+  }
+
+  delete (sid) {
+    return new Promise((resolve, reject) => {
+      this.client.del(sid, (err, data) => {
+        err ? reject(err) : resolve(data)
       })
     })
   }
 
-  async delete (sid) {
+  quit () {
     return new Promise((resolve, reject) => {
-      this.client.del(sid, err => {
-        err ? reject(err) : resolve()
+      this.client.quit((err, data) => {
+        err ? reject(err) : resolve(data)
       })
     })
   }

@@ -16,7 +16,7 @@
     "redis"
   ],
   "engines": {
-    "node": ">=6"
+    "node": ">=7"
   },
   "files": [
     "LICENSE",
@@ -30,12 +30,12 @@
     "test": "xo && nyc ava"
   },
   "dependencies": {
-    "fast-json-parse": "1.0.2",
-    "fast-safe-stringify": "1.1.6",
-    "redis": "2.6.5"
+    "fast-json-parse": "^1.0.2",
+    "fast-safe-stringify": "^1.1.13",
+    "redis": "^2.7.1"
   },
   "devDependencies": {
-    "ava": "0.18",
+    "ava": "0.19",
     "babel-plugin-transform-async-to-generator": "6",
     "babel-plugin-transform-es2015-modules-commonjs": "6",
     "babel-preset-es2016": "6",
@@ -43,8 +43,8 @@
     "nyc": "10",
     "request": "2",
     "request-promise": "4",
-    "trek-engine": "0.5",
-    "xo": "0.17"
+    "trek-engine": "1",
+    "xo": "0.18"
   },
   "ava": {
     "concurrency": 5,
@@ -106,6 +106,7 @@
   },
   "nyc": {
     "reporter": [
+      "html",
       "lcov",
       "text"
     ]
