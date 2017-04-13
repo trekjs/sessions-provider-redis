@@ -1,6 +1,6 @@
 {
   "name": "sessions-provider-redis",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Sessions Redis Provider",
   "license": "MIT",
   "repository": "trekjs/sessions-provider-redis",

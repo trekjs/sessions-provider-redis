@@ -112,6 +112,10 @@ test('should throw error when redis is already closed', async t => {
 
   await provider.set('610', 'trek engine', 2000)
 
+  const has = await provider.has('610')
+
+  t.is(has, 1)
+
   await provider.quit()
 
   const error = await t.throws(provider.get('610'))

@@ -51,6 +51,14 @@ module.exports = class RedisProvider {
     })
   }
 
+  has (sid) {
+    return new Promise((resolve, reject) => {
+      this.client.exists(sid, (err, data) => {
+        err ? reject(err) : resolve(data)
+      })
+    })
+  }
+
   set (sid, sess, expires) {
     return new Promise((resolve, reject) => {
       this.client.setex(
