@@ -98,9 +98,9 @@ test('should throw error when JSON parse', async t => {
     }
   })
 
-  await provider.set('610', 'trek engine', 2000)
+  await provider.set('1024', 'trek engine', 2000)
 
-  const error = await t.throws(provider.get('610'))
+  const error = await t.throws(provider.get('1024'))
 
   t.true(/SyntaxError/.test(error.toString()))
 
@@ -110,15 +110,15 @@ test('should throw error when JSON parse', async t => {
 test('should throw error when redis is already closed', async t => {
   const provider = new RedisProvider()
 
-  await provider.set('610', 'trek engine', 2000)
+  await provider.set('987', 'trek engine', 2000)
 
-  const has = await provider.has('610')
+  const has = await provider.has('987')
 
   t.is(has, 1)
 
   await provider.quit()
 
-  const error = await t.throws(provider.get('610'))
+  const error = await t.throws(provider.get('987'))
 
   t.true(/The connection is already closed/.test(error.message))
 })
