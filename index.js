@@ -20,8 +20,7 @@ const defaults = {
 }
 
 module.exports = class RedisProvider {
-
-  constructor (options = {}) {
+  constructor(options = {}) {
     Object.keys(options).forEach(k => {
       if (!(k in defaults)) delete options[k]
     })
@@ -32,60 +31,53 @@ module.exports = class RedisProvider {
     }
   }
 
-  clear () {
+  clear() {
     return new Promise((resolve, reject) => {
-      this.client.flushdb(err => {
-        err ? reject(err) : resolve()
-      })
+      this.client.flushdb(err => (err ? reject(err) : resolve()))
     })
   }
 
-  get (sid) {
+  get(sid) {
     return new Promise((resolve, reject) => {
       this.client.get(sid, (error, data) => {
         if (error) return reject(error)
         if (!data) return resolve()
         const { err, value } = this.serializer.parse(data)
-        err ? reject(err) : resolve(value)
+        if (err) return reject(err)
+        resolve(value)
       })
     })
   }
 
-  has (sid) {
+  has(sid) {
     return new Promise((resolve, reject) => {
-      this.client.exists(sid, (err, data) => {
-        err ? reject(err) : resolve(data)
-      })
+      this.client.exists(
+        sid,
+        (err, data) => (err ? reject(err) : resolve(Boolean(data)))
+      )
     })
   }
 
-  set (sid, sess, expires) {
+  set(sid, sess, expires) {
     return new Promise((resolve, reject) => {
       this.client.setex(
         sid,
         expires / 1000,
         this.serializer.stringify(sess),
-        (err, data) => {
-          err ? reject(err) : resolve(data)
-        }
+        (err, data) => (err ? reject(err) : resolve(data))
       )
     })
   }
 
-  delete (sid) {
+  delete(sid) {
     return new Promise((resolve, reject) => {
-      this.client.del(sid, (err, data) => {
-        err ? reject(err) : resolve(data)
-      })
+      this.client.del(sid, (err, data) => (err ? reject(err) : resolve(data)))
     })
   }
 
-  quit () {
+  quit() {
     return new Promise((resolve, reject) => {
-      this.client.quit((err, data) => {
-        err ? reject(err) : resolve(data)
-      })
+      this.client.quit((err, data) => (err ? reject(err) : resolve(data)))
     })
   }
-
 }

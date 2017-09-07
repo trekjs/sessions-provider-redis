@@ -24,9 +24,13 @@ test('should return undefined', async t => {
 test('should save a session', async t => {
   const provider = new RedisProvider()
 
-  await provider.set('233', {
-    cookie: {}
-  }, 2000)
+  await provider.set(
+    '233',
+    {
+      cookie: {}
+    },
+    2000
+  )
 
   const sess = await provider.get('233')
 
@@ -40,9 +44,13 @@ test('should save a session', async t => {
 test('should delete a session', async t => {
   const provider = new RedisProvider()
 
-  await provider.set('233', {
-    cookie: {}
-  }, 2000)
+  await provider.set(
+    '233',
+    {
+      cookie: {}
+    },
+    2000
+  )
 
   let sess = await provider.get('233')
 
@@ -62,13 +70,25 @@ test('should delete a session', async t => {
 test('should clear all sessions', async t => {
   const provider = new RedisProvider()
 
-  await provider.set('233', {
-    cookie: {}
-  }, 2000)
+  await provider.set(
+    '233',
+    {
+      cookie: {}
+    },
+    2000
+  )
 
-  await provider.set('377', {
-    cookie: {}
-  }, 2000)
+  t.is(await provider.has('233'), true)
+
+  await provider.set(
+    '377',
+    {
+      cookie: {}
+    },
+    2000
+  )
+
+  t.is(await provider.has('377'), true)
 
   await provider.clear('233')
 
@@ -77,6 +97,9 @@ test('should clear all sessions', async t => {
 
   t.is(sess0, undefined)
   t.is(sess1, undefined)
+
+  t.is(await provider.has('233'), false)
+  t.is(await provider.has('377'), false)
 
   await provider.quit()
 })
@@ -114,7 +137,7 @@ test('should throw error when redis is already closed', async t => {
 
   const has = await provider.has('987')
 
-  t.is(has, 1)
+  t.is(has, true)
 
   await provider.quit()
 
